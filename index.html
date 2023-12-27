@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Document</title>
+</head>
+
+<style>
+  * {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+  }
+
+  html,
+  body {
+    width: 100%;
+    height: 100%;
+    background: linear-gradient(to right, lightblue, yellow);
+
+    font-family: 'Courier New', Courier, monospace;
+  }
+
+  #main {
+    background-color: white;
+    padding: 4vw 5vw;
+    border-radius: 10px;
+    box-shadow: 0 10px 20px rgb(0, 0, 0, 0.3);
+    text-align: center;
+    position: absolute;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+  }
+
+  #main button {
+    margin: 2vw;
+    padding: 0.5vw 0.8vw;
+    background-color: red;
+    border: none;
+    border-radius: 5px;
+    font-size: 2vw;
+    color: white;
+
+    cursor: pointer;
+  }
+
+  #click:disabled {
+    background-color: gray;
+    cursor: not-allowed;
+
+  }
+
+  #quote {
+    width: 100%;
+    font-size: 1.5vw;
+    background-color: black;
+    text-align: center;
+
+    border-radius: 5px;
+    color: greenyellow;
+    padding: 0.5vw 0.7vw;
+  }
+
+  #quotegen {
+    font-size: 3vw;
+  }
+
+  p {
+    margin-top: 0.8vw;
+    background-color: hsla(240, 74%, 48%, 0.696);
+    color: white;
+    padding: 0.5vw 0.7vw;
+    border-radius: 10px;
+    font-weight: 600;
+  }
+</style>
+
+<body>
+  <div id="main">
+    <h3 id="quotegen">Quotes Generator</h3>
+    <button id="click">Get Quote</button>
+    <h3 id="quote">Quote</h3>
+    <p>Author</p>
+  </div>
+
+  <script>
+    let btn = document.getElementById('click');
+    let quote = document.getElementById('quote')
+    let author = document.querySelector('p');
+
+    btn.onclick = async function () {
+      try {
+        btn.disabled = true
+        btn.innerHTML = 'Loading ...'
+        author.innerHTML = 'Loading ...'
+
+        quote.innerHTML = 'Updating ...'
+
+        const response = await fetch('https://api.quotable.io/random')
+
+        const data = await response.json();
+        author.innerHTML = data.author
+        btn.disabled = false;
+        btn.innerHTML = 'Get Quote'
+        quote.innerHTML = `${data.content}`
+
+      }
+      catch (error) {
+        btn.disabled = false;
+        btn.innerText = 'Get Quote'
+        quote.innerText = 'An error occured... Try Again'
+        author.innerHTML = 'An error occured... '
+
+      }
+    }
+  </script>
+</body>
+
+</html>
